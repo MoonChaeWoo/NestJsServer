@@ -5,8 +5,18 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Get() // 아무것도 넣지 않는다면 /와 같은 의미
+  getHello(){
+    return 'Home Page';
+  }
+
+  @Get('post')
+  getPost() {
+    return 'Post Page';
+  }
+
+  @Get('user')
+  getUser(){
+    return 'User Page';
   }
 }
