@@ -1,0 +1,18 @@
+# npm 최신 설치
+-> npm install -g npm@latest
+
+# yarn 최신 설치
+-> npm install --global yarn@latest
+
+# corepack enable
+# 설명 : npm외 서드파티 패키지 관리자를 
+        전역에 설치하지 않고 사용 가능하게 한다
+-> corepack enable
+
+# coreP
+
+# 프로젝트 생성
+-> nest new [ProjectName] or . (현재위치에 바로 생성할 때);
+
+# 모듈 생성 시
+-> nest g resource
