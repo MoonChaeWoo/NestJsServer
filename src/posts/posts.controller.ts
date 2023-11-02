@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import { PostsService } from './posts.service';
 
 interface PostModel {
@@ -95,5 +95,34 @@ export class PostsController {
     posts = [...posts, post];
 
     return post;
+  }
+
+  // 파라미터 단에서도 선택적으로 하려면 ?를 작성해줘야한다.
+  @Put(':id')
+  putPost(
+    @Param('id') id : string,
+    @Body('author') author ?: string,
+    @Body('title') title ?: string,
+    @Body('content') content ?: string
+  ) : PostModel {
+    const findPost = posts.find(v => v.id === +id);
+
+    if(!findPost) throw new NotFoundException;
+
+    if(author){
+      findPost.author = author;
+    };
+
+    if(title){
+      findPost.title = title;
+    };
+
+    if(content){
+      findPost.content = content;
+    };
+
+    posts = posts.map(v => v.id === +id ? findPost : v);
+
+    return findPost;
   }
 }
