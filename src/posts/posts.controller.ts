@@ -1,34 +1,34 @@
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
 import { PostsService } from './posts.service';
 
 interface PostModel {
   id : number;
   author : string;
   title : string;
-  contents : string;
+  content : string;
   likeCount : number;
   commentCount : number;
 };
 
-const posts : PostModel[] = [{
+let posts : PostModel[] = [{
   id : 1,
   author : 'authorPost1',
   title : 'titlePost',
-  contents : 'contentsPost',
+  content : 'contentsPost',
   likeCount : 10,
   commentCount : 10
 },{
   id : 2,
   author : 'authorPost2',
   title : 'titlePost',
-  contents : 'contentsPost',
+  content : 'contentsPost',
   likeCount : 11,
   commentCount : 11
 },{
   id : 3,
   author : 'authorPost3',
   title : 'titlePost',
-  contents : 'contentsPost',
+  content : 'contentsPost',
   likeCount : 12,
   commentCount : 12
 }];
@@ -70,6 +70,30 @@ export class PostsController {
     if(!post){
       throw new NotFoundException;
     }
+    return post;
+  }
+
+  // POST /posts
+  //      POST를 생성
+  @Post()
+  postPosts(
+    @Body('author') author : string,
+    @Body('title') title : string,
+    @Body('content') content : string
+  ) : PostModel{
+    const post : PostModel = {
+      id : posts[posts.length - 1].id + 1,
+      author,
+      title,
+      content,
+      likeCount : 0,
+      commentCount : 0,
+    };
+
+    if(!author || !title || !content) throw new NotFoundException;
+
+    posts = [...posts, post];
+
     return post;
   }
 }
