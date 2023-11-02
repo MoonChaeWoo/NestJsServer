@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import { PostsService } from './posts.service';
 
 interface PostModel {
@@ -57,7 +57,7 @@ export class PostsController {
   @Get() // 아무것도 넣지 않는다면 /와 같은 의미
   getPosts() : PostModel[]{
     return posts;
-  }
+  };
 
   // GET /posts/:id/:name/:age
   // http://127.0.0.1:3000/posts/1
@@ -71,7 +71,7 @@ export class PostsController {
       throw new NotFoundException;
     }
     return post;
-  }
+  };
 
   // POST /posts
   //      POST를 생성
@@ -95,7 +95,7 @@ export class PostsController {
     posts = [...posts, post];
 
     return post;
-  }
+  };
 
   // 파라미터 단에서도 선택적으로 하려면 ?를 작성해줘야한다.
   @Put(':id')
@@ -124,5 +124,17 @@ export class PostsController {
     posts = posts.map(v => v.id === +id ? findPost : v);
 
     return findPost;
-  }
+  };
+
+  // DELETE /posts/:id
+  //        id에 해당되는 POST를 삭제한다.
+  @Delete(':id')
+  deletePost(@Param('id') id : string) : string{
+
+    const post = posts.find(v => v.id === +id);
+    if(!post) throw new NotFoundException;
+
+    posts = posts.filter(v => v.id !== +id);
+    return id;
+  };
 }
