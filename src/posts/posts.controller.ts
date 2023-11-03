@@ -1,38 +1,5 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
-import { PostsService } from './posts.service';
-
-interface PostModel {
-  id : number;
-  author : string;
-  title : string;
-  content : string;
-  likeCount : number;
-  commentCount : number;
-};
-
-let posts : PostModel[] = [{
-  id : 1,
-  author : 'authorPost1',
-  title : 'titlePost',
-  content : 'contentsPost',
-  likeCount : 10,
-  commentCount : 10
-},{
-  id : 2,
-  author : 'authorPost2',
-  title : 'titlePost',
-  content : 'contentsPost',
-  likeCount : 11,
-  commentCount : 11
-},{
-  id : 3,
-  author : 'authorPost3',
-  title : 'titlePost',
-  content : 'contentsPost',
-  likeCount : 12,
-  commentCount : 12
-}];
-
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { PostsService, PostModel } from './posts.service';
 // GET
 // 1) GET /posts
 //    모든 값을 가져온다.
@@ -56,7 +23,7 @@ export class PostsController {
 
   @Get() // 아무것도 넣지 않는다면 /와 같은 의미
   getPosts() : PostModel[]{
-    return posts;
+    return this.postsService.getAllPosts();
   };
 
   // GET /posts/:id/:name/:age
@@ -65,12 +32,7 @@ export class PostsController {
   // 자세하게는 파라미터 규칙.txt확인
   @Get(':id') 
   getPost(@Param('id') id : string) : PostModel{
-    const post = posts.find(v => v.id === +id);
-
-    if(!post){
-      throw new NotFoundException;
-    }
-    return post;
+    return this.postsService.getPostById(+id);
   };
 
   // POST /posts
@@ -81,20 +43,7 @@ export class PostsController {
     @Body('title') title : string,
     @Body('content') content : string
   ) : PostModel{
-    const post : PostModel = {
-      id : posts[posts.length - 1].id + 1,
-      author,
-      title,
-      content,
-      likeCount : 0,
-      commentCount : 0,
-    };
-
-    if(!author || !title || !content) throw new NotFoundException;
-
-    posts = [...posts, post];
-
-    return post;
+    return this.postsService.createPost(author, title, content);
   };
 
   // 파라미터 단에서도 선택적으로 하려면 ?를 작성해줘야한다.
@@ -105,36 +54,13 @@ export class PostsController {
     @Body('title') title ?: string,
     @Body('content') content ?: string
   ) : PostModel {
-    const findPost = posts.find(v => v.id === +id);
-
-    if(!findPost) throw new NotFoundException;
-
-    if(author){
-      findPost.author = author;
-    };
-
-    if(title){
-      findPost.title = title;
-    };
-
-    if(content){
-      findPost.content = content;
-    };
-
-    posts = posts.map(v => v.id === +id ? findPost : v);
-
-    return findPost;
+    return this.postsService.updatePost(+id, author, title, content);
   };
 
   // DELETE /posts/:id
   //        id에 해당되는 POST를 삭제한다.
   @Delete(':id')
-  deletePost(@Param('id') id : string) : string{
-
-    const post = posts.find(v => v.id === +id);
-    if(!post) throw new NotFoundException;
-
-    posts = posts.filter(v => v.id !== +id);
-    return id;
+  deletePost(@Param('id') id : string) : number{
+    return this.postsService.deletePost(+id);
   };
 }
