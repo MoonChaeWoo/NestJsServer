@@ -1,40 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-
-export interface PostModel {
-    id : number;
-    author : string;
-    title : string;
-    content : string;
-    likeCount : number;
-    commentCount : number;
-  };
-  
-  let posts : PostModel[] = [{
-    id : 1,
-    author : 'authorPost1',
-    title : 'titlePost',
-    content : 'contentsPost',
-    likeCount : 10,
-    commentCount : 10
-  },{
-    id : 2,
-    author : 'authorPost2',
-    title : 'titlePost',
-    content : 'contentsPost',
-    likeCount : 11,
-    commentCount : 11
-  },{
-    id : 3,
-    author : 'authorPost3',
-    title : 'titlePost',
-    content : 'contentsPost',
-    likeCount : 12,
-    commentCount : 12
-  }];
-
+import { Repository } from 'typeorm';
+import { PostModel } from './entities/post.entities';
+import { InjectRepository } from '@nestjs/typeorm';
   
 @Injectable()
 export class PostsService {
+    constructor(
+        @InjectRepository(PostModel)
+        private readonly postsRepository: Repository<PostModel>
+    ){}
+
+
     getAllPosts(){
         return posts; 
     };

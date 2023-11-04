@@ -12,3 +12,6 @@
 3. pg
 -> pgadmin 패키지
 
+# TypeOrmModule.forRoot, TypeOrmModule.forFeature
+-> forRoot는 app.module(main)에 db 설정 내용을 작성
+-> forFeature는 모델에 해당하는 repository를 작성
