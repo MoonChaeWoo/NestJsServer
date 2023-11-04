@@ -15,3 +15,10 @@
 # TypeOrmModule.forRoot, TypeOrmModule.forFeature
 -> forRoot는 app.module(main)에 db 설정 내용을 작성
 -> forFeature는 모델에 해당하는 repository를 작성
+
+# find()
+-> 조건을 넣지 않는다면 모든 Data를 다 가져옴.
+
+# save()
+-> 데이터가 존재하지 않는다면 아이템을 새로 생성
+-> 데이터가 존재한다면 업데이트한다.

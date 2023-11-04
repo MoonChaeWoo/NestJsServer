@@ -11,39 +11,47 @@ export class PostsService {
     ){}
 
 
-    getAllPosts(){
-        return posts; 
+    async getAllPosts(){
+        return this.postsRepository.find() ;
     };
 
-    getPostById(id : number){
-        const post = posts.find(v => v.id === id);
+    async getPostById(id : number){
+        const post = await this.postsRepository.findOne({
+            where : {
+                id, //id : id, where id = ${id}와 같은 의미
+            },
+        });
 
-        if(!post){
-            throw new NotFoundException;
-        }
+        if(!post) throw new NotFoundException;
 
         return post;
     };
 
-    createPost(author : string, title : string, content : string){
-        const post : PostModel = {
-            id : posts[posts.length - 1].id + 1,
+    async createPost(author : string, title : string, content : string){
+    
+        // create()는 저장소와 연결이 아닌 객체만 생성이기 때문에 동기이다.
+        const post = this.postsRepository.create({
             author,
             title,
             content,
             likeCount : 0,
-            commentCount : 0,
-        };
+            commentCount : 0
+        });
 
         if(!author || !title || !content) throw new NotFoundException;
 
-        posts = [...posts, post];
+        const newPost = await this.postsRepository.save(post);
 
-        return post;
+        return newPost;
     };
 
-    updatePost(id : number, author : string, title : string, content : string){
-        const findPost = posts.find(v => v.id === id);
+    async updatePost(id : number, author : string, title : string, content : string){
+
+        const findPost = await this.postsRepository.findOne({
+            where : {
+                id
+            },
+        });
 
         if(!findPost) throw new NotFoundException;
 
@@ -59,16 +67,22 @@ export class PostsService {
             findPost.content = content;
         }
 
-        posts = posts.map(v => v.id === +id ? findPost : v);
+       const newPost = await this.postsRepository.save(findPost);
 
-        return findPost;
+        return newPost;
     };
 
-    deletePost(id : number){
-        const post = posts.find(v => v.id === id);
-        if(!post) throw new NotFoundException;
+    async deletePost(id : number){
+        const findPost = await this.postsRepository.findOne({
+            where : {
+                id
+            },
+        });
 
-        posts = posts.filter(v => v.id !== +id);
+        if(!findPost) throw new NotFoundException;
+
+        const deletePost = await this.postsRepository.delete(findPost);
+
         return id;
     }
 }

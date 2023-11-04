@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { PostsService, PostModel } from './posts.service';
+import { PostsService } from './posts.service';
+import { PostModel } from './entities/post.entities';
 // GET
 // 1) GET /posts
 //    모든 값을 가져온다.
@@ -22,7 +23,7 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Get() // 아무것도 넣지 않는다면 /와 같은 의미
-  getPosts() : PostModel[]{
+  getPosts() : Promise<PostModel[]>{
     return this.postsService.getAllPosts();
   };
 
@@ -31,7 +32,7 @@ export class PostsController {
   // @Param('id') 이렇게 하면 id에 해당하는 쿼리스트링을 가져온다.
   // 자세하게는 파라미터 규칙.txt확인
   @Get(':id') 
-  getPost(@Param('id') id : string) : PostModel{
+  getPost(@Param('id') id : string) : Promise<PostModel>{
     return this.postsService.getPostById(+id);
   };
 
@@ -42,7 +43,7 @@ export class PostsController {
     @Body('author') author : string,
     @Body('title') title : string,
     @Body('content') content : string
-  ) : PostModel{
+  ) : Promise<PostModel>{
     return this.postsService.createPost(author, title, content);
   };
 
@@ -53,14 +54,14 @@ export class PostsController {
     @Body('author') author ?: string,
     @Body('title') title ?: string,
     @Body('content') content ?: string
-  ) : PostModel {
+  ) : Promise<PostModel> {
     return this.postsService.updatePost(+id, author, title, content);
   };
 
   // DELETE /posts/:id
   //        id에 해당되는 POST를 삭제한다.
   @Delete(':id')
-  deletePost(@Param('id') id : string) : number{
+  deletePost(@Param('id') id : string) : Promise<number>{
     return this.postsService.deletePost(+id);
   };
 }
