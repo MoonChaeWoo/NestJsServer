@@ -1,0 +1,14 @@
+# NestJs에서 DB 사용하기
+
+# 전체 명령어
+-> yarn add @nestjs/typeorm typeorm pg
+
+1. @nestjs/typeorm
+-> nestjs에서 typeorm을 이용하기 위한 유틸리티
+
+2. typeorm
+-> typeorm 패키지
+
+3. pg
+-> pgadmin 패키지
+

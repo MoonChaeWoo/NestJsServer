@@ -44,7 +44,7 @@ export class PostsService {
 
         if(!post){
             throw new NotFoundException;
-        };
+        }
 
         return post;
     };
@@ -72,16 +72,16 @@ export class PostsService {
         if(!findPost) throw new NotFoundException;
 
         if(author){
-        findPost.author = author;
-        };
+            findPost.author = author;
+        }
 
         if(title){
-        findPost.title = title;
-        };
+            findPost.title = title;
+        }
 
         if(content){
-        findPost.content = content;
-        };
+            findPost.content = content;
+        }
 
         posts = posts.map(v => v.id === +id ? findPost : v);
 
