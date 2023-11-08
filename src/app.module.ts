@@ -3,20 +3,24 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PostsModule } from './posts/posts.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostModel } from './posts/entities/post.entities';
+import { PostModel } from './posts/entities/post.entity';
+import { UsersModule } from './users/users.module';
+import { UsersModel } from "./users/entities/user.entity";
 
 // 의존성을 관리하는 곳
 @Module({
   imports: [PostsModule,
+            UsersModule,
             TypeOrmModule.forRoot({
               type: 'postgres',
               host: 'localhost',
-              port: 31115,
+              port: 5435,
               username: 'postgres',
-              password: '1q2w3e4r!',
-              database: 'NestJs_DataBase',
+              password: 'postgres',
+              database: 'nestjs_server',
               entities: [
                 PostModel, // entities의 class를 주입
+                UsersModel
               ], // 생성할 모델들이 들어가는 곳
               synchronize: true, // 개발 시 true, 배포 시 false
             })],

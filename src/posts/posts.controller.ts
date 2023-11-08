@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { PostsService } from './posts.service';
-import { PostModel } from './entities/post.entities';
+import { PostModel } from './entities/post.entity';
 // GET
 // 1) GET /posts
 //    모든 값을 가져온다.

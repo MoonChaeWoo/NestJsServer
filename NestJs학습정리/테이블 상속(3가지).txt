@@ -1,0 +1,94 @@
+1. typeOrm을 통한 테이블 컬럼 상속
+1단계
+-> 먼저 상속을 해줄 컬럼들을 정리한 클래스를 하나 작성한다.
+export class Name{
+    @Column()
+    _first: string;
+
+    @Column()
+    _last: string;
+}
+
+2단계
+-> 상속을 해줄 모델 클래스의 컬럼 안에 콜백함수로 상속을 할 클래스를 넣어준다.
+@Entity()
+export class StudentModel{
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column(() => Name)
+    name: Name;
+
+    @Column()
+    class: string;
+}
+------------------------------------------------------------------------------
+2. 부모 모델을 통한 상속
+1단계
+-> 상속을 해줄 BaseModel을 하나 작성한다.
+export class BaseModel{
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @CreateDateColumn({
+        name: 'created_at'
+    })
+    createdAt: Date;
+
+    @UpdateDateColumn({
+        name: 'updated_at'
+    })
+    updatedAt: Date;
+}
+
+2단계
+-> 상속을 해줄 모델에 extends를 하여 확장을 해준다.
+@Entity()
+export class BookModel extends BaseModel{
+    @Column()
+    name: string;
+}
+------------------------------------------------------------------------------
+3. 테이블을 하나로 합치기
+1단계
+-> 먼저 기준이 될 BaseModel을 작성한다.
+-> 기준이 될 베이스 모델 위에 @Entity(), @TableInheritance() 데코레이션 작성
+-> @TableInheritance()안에 합친 두 데이블을 구분할 컬럼을 추가하고 싶을 시 옵션으로
+   {column: {name: 'type',type: 'varchar'}} 이걸 넣어준다.
+
+@Entity()
+@TableInheritance({
+   column: {
+       name: 'type',
+       type: 'varchar'
+   }
+})
+export class SingleBaseModel{
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @CreateDateColumn({
+        name: 'created_at'
+    })
+    createdAt: Date;
+
+    @UpdateDateColumn({
+        name: 'updated_at'
+    })
+    updatedAt: Date;
+}
+
+2단계
+-> 분할되어있는 테이블들 위에 @ChildEntity()를 작성한다.
+
+@ChildEntity()
+export class ComputerModel extends SingleBaseModel{
+    @Column()
+    brand: string;
+}
+
+@ChildEntity()
+export class AirplaneModel extends SingleBaseModel{
+    @Column()
+    country: string;
+}

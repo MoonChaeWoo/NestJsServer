@@ -1,0 +1,44 @@
+Not()
+-> id : Not(1),
+-> id가 1이 아닌 것들을 선택
+
+LessThan()
+-> id : LessThan(10),
+-> 보다 작은 값을 찾을 때 사용한다.
+
+LessThanOrEqual()
+-> id : LessThanOrEqual(10),
+-> 작거나 같은 값을 선택할 때 사용한다.
+
+MoreThan()
+-> id : MoreThan(10),
+-> 보다 큰 것을 찾을 때 사용한다.
+
+MoreThanOrEqual()
+-> id : MoreThanOrEqual(10),
+-> 보다 크거나 같은 값을 찾을 때 사용한다.
+
+Equal()
+-> id : 1 또는 id : Equal(1),
+
+Like()
+-> like와 같은 기능
+-> %를 꼭 넣어주어야한다.
+-> 앞에 어떤 글자가 와도 된다. %google
+-> email: Like('%google'),
+
+ILike()
+-> 대소문자 구별 안하는 like
+-> email : ILike('%google%'),
+
+Between()
+-> 사이값
+-> id : Between(10, 15),
+
+In()
+-> 해당되는 여러개의 값
+-> id : In(1, 3, 5, 7, 10),
+
+IsNull()
+-> null인것을 찾기
+->id : IsNull(),
