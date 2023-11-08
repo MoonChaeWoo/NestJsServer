@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { PostModel } from './entities/post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UsersModel } from "../users/entities/user.entity";
   
 @Injectable()
 export class PostsService {
@@ -12,7 +13,9 @@ export class PostsService {
 
 
     async getAllPosts(){
-        return this.postsRepository.find() ;
+        return this.postsRepository.find({
+            relations : ['author']
+        }) ;
     };
 
     async getPostById(id : number){
@@ -20,6 +23,7 @@ export class PostsService {
             where : {
                 id, //id : id, where id = ${id}와 같은 의미
             },
+            relations : ['author']
         });
 
         if(!post) throw new NotFoundException;
@@ -27,25 +31,27 @@ export class PostsService {
         return post;
     };
 
-    async createPost(author : string, title : string, content : string){
+    async createPost(authorId : number, title : string, content : string){
     
         // create()는 저장소와 연결이 아닌 객체만 생성이기 때문에 동기이다.
         const post = this.postsRepository.create({
-            author,
+            author : {
+                id : authorId
+            },
             title,
             content,
             likeCount : 0,
             commentCount : 0
         });
 
-        if(!author || !title || !content) throw new NotFoundException;
+        if(!title || !content) throw new NotFoundException;
 
         const newPost = await this.postsRepository.save(post);
 
         return newPost;
     };
 
-    async updatePost(id : number, author : string, title : string, content : string){
+    async updatePost(id : number, title : string, content : string){
 
         const findPost = await this.postsRepository.findOne({
             where : {
@@ -54,10 +60,6 @@ export class PostsService {
         });
 
         if(!findPost) throw new NotFoundException;
-
-        if(author){
-            findPost.author = author;
-        }
 
         if(title){
             findPost.title = title;

@@ -40,22 +40,21 @@ export class PostsController {
   //      POST를 생성
   @Post()
   postPosts(
-    @Body('author') author : string,
+    @Body('authorId') authorId : number,
     @Body('title') title : string,
     @Body('content') content : string
   ) : Promise<PostModel>{
-    return this.postsService.createPost(author, title, content);
+    return this.postsService.createPost(authorId, title, content);
   };
 
   // 파라미터 단에서도 선택적으로 하려면 ?를 작성해줘야한다.
   @Put(':id')
   putPost(
     @Param('id') id : string,
-    @Body('author') author ?: string,
     @Body('title') title ?: string,
     @Body('content') content ?: string
   ) : Promise<PostModel> {
-    return this.postsService.updatePost(+id, author, title, content);
+    return this.postsService.updatePost(+id, title, content);
   };
 
   // DELETE /posts/:id
