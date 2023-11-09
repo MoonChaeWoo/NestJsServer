@@ -6,12 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostModel } from './posts/entities/post.entity';
 import { UsersModule } from './users/users.module';
 import { UsersModel } from "./users/entities/user.entity";
+import { AuthModule } from './auth/auth.module';
 
 // 의존성을 관리하는 곳
 @Module({
-  imports: [PostsModule,
-            UsersModule,
-            TypeOrmModule.forRoot({
+  imports: [TypeOrmModule.forRoot({
               type: 'postgres',
               host: 'localhost',
               port: 5435,
@@ -23,7 +22,10 @@ import { UsersModel } from "./users/entities/user.entity";
                 UsersModel
               ], // 생성할 모델들이 들어가는 곳
               synchronize: true, // 개발 시 true, 배포 시 false
-            })],
+            }),
+            AuthModule,
+            PostsModule,
+            UsersModule],
   controllers: [AppController],
   providers: [AppService],
 })
