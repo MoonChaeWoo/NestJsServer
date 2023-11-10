@@ -103,5 +103,9 @@ export class AuthService {
             user.password,
             HASH_ROUNDS,
         );
+
+        const newUser = await this.usersService.createUser(user);
+
+        return this.loginUser(newUser);
     }
 }
