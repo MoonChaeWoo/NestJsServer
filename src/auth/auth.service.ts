@@ -7,7 +7,8 @@ import { JWT_SECRET } from './const/auth.const';
 export class AuthService {
 
     constructor(
-        private readonly jwtService : JwtService
+        private readonly jwtService : JwtService,
+        //private readonly usersModel : UsersModel
     ){}
 
     /**
