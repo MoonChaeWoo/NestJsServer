@@ -58,14 +58,14 @@ export class AuthService {
             // Refresh토큰은 길게 access 토큰은 짧게
             expiresIn : isRefreshToken ? 3600 : 300, 
         });
-    }
+    };
 
     async loginUser(user : Pick<UsersModel, 'email' | 'id'>){
         return {
             accessToken : this.signToken(user, false),
             refreshToken : this.signToken(user, true)
         }
-    }
+    };
 
     async authenticateWithEmailAndPassword(user : Pick<UsersModel, 'email' | 'password'>){
         const existUser = this.usersService.getUserByEmail(user.email);
@@ -87,5 +87,11 @@ export class AuthService {
         }
 
         return existUser;
-    }
+    };
+
+    async loginWithEmail(user : Pick<UsersModel, 'email' | 'password'>){
+        const existUser = await this.authenticateWithEmailAndPassword(user);
+
+        return this.loginUser(existUser);
+    };
 }
