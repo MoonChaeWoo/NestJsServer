@@ -7,7 +7,8 @@ import { JWT_SECRET } from './const/auth.const';
 export class AuthService {
 
     constructor(
-        private readonly jwtService : JwtService
+        private readonly jwtService : JwtService,
+        //private readonly usersModel : UsersModel
     ){}
 
     /**
@@ -55,5 +56,9 @@ export class AuthService {
             // Refresh토큰은 길게 access 토큰은 짧게
             expiresIn : isRefreshToken ? 3600 : 300, 
         });
+    }
+
+    async loginUser(){
+        
     }
 }
