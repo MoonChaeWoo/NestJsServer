@@ -68,7 +68,7 @@ export class AuthService {
     };
 
     async authenticateWithEmailAndPassword(user : Pick<UsersModel, 'email' | 'password'>){
-        const existUser = this.usersService.getUserByEmail(user.email);
+        const existUser = await this.usersService.getUserByEmail(user.email);
 
         if(!existUser) throw new UnauthorizedException('존재하지 않는 사용자입니다');
 
@@ -80,7 +80,7 @@ export class AuthService {
          * 1) 입력된 비밀번호
          * 2) 기존 해쉬 -> 사용자 정보에 저장돼있는 해쉬
          */
-        const passCheck = await bcrypt.compare(user.password, (await existUser).password);
+        const passCheck = await bcrypt.compare(user.password, existUser.password);
 
         if(!passCheck){
             throw new UnauthorizedException('비밀번호가 틀렸습니다');
@@ -104,7 +104,7 @@ export class AuthService {
             HASH_ROUNDS,
         );
 
-        const newUser = await this.usersService.createUser(user);
+        const newUser = await this.usersService.createUser({...user, password : hash});
 
         return this.loginUser(newUser);
     }
