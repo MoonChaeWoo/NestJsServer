@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersModel } from 'src/users/entities/user.entity';
 import { UsersService } from './../users/users.service';
-import { JWT_SECRET } from './const/auth.const';
+import { HASH_ROUNDS, JWT_SECRET } from './const/auth.const';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -94,4 +94,14 @@ export class AuthService {
 
         return this.loginUser(existUser);
     };
+
+    async registerWithEmail(user : Pick<UsersModel, 'email' | 'nickname' | 'password'>){
+        // 비밀번호 해시 생성하는 기능
+        // (해싱할 패스워드, 해시 라운드)
+        // 솔트는 자동으로 해줌
+        const hash = await bcrypt.hash(
+            user.password,
+            HASH_ROUNDS,
+        );
+    }
 }

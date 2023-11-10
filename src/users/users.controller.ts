@@ -17,8 +17,7 @@ export class UsersController {
   @Post('create')
   createUser(@Body('nickname') nickname : string,
              @Body('email') email : string,
-             @Body('password') password : string,
-             @Body('role') role ?: RolesEnum){
-    return this.usersService.createUser(nickname, email, password, role);
+             @Body('password') password : string){
+    return this.usersService.createUser({nickname, email, password});
   }
 }
