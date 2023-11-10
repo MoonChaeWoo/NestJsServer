@@ -1,14 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersModel } from 'src/users/entities/user.entity';
+import { UsersService } from './../users/users.service';
 import { JWT_SECRET } from './const/auth.const';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
 
     constructor(
         private readonly jwtService : JwtService,
-        //private readonly usersModel : UsersModel
+        private readonly usersService : UsersService
     ){}
 
     /**
@@ -63,5 +65,27 @@ export class AuthService {
             accessToken : this.signToken(user, false),
             refreshToken : this.signToken(user, true)
         }
+    }
+
+    async authenticateWithEmailAndPassword(user : Pick<UsersModel, 'email' | 'password'>){
+        const existUser = this.usersService.getUserByEmail(user.email);
+
+        if(!existUser) throw new UnauthorizedException('존재하지 않는 사용자입니다');
+
+        /**
+         * 
+         * 비밀번호 비교
+         * 파라미터
+         * 
+         * 1) 입력된 비밀번호
+         * 2) 기존 해쉬 -> 사용자 정보에 저장돼있는 해쉬
+         */
+        const passCheck = await bcrypt.compare(user.password, (await existUser).password);
+
+        if(!passCheck){
+            throw new UnauthorizedException('비밀번호가 틀렸습니다');
+        }
+
+        return existUser;
     }
 }
