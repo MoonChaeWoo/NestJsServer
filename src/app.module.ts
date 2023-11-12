@@ -7,6 +7,7 @@ import { PostModel } from './posts/entities/post.entity';
 import { UsersModule } from './users/users.module';
 import { UsersModel } from "./users/entities/user.entity";
 import { AuthModule } from './auth/auth.module';
+import { CommonModule } from './common/common.module';
 
 // 의존성을 관리하는 곳
 @Module({
@@ -25,7 +26,8 @@ import { AuthModule } from './auth/auth.module';
             }),
             AuthModule,
             PostsModule,
-            UsersModule],
+            UsersModule,
+            CommonModule],
   controllers: [AppController],
   providers: [AppService],
 })

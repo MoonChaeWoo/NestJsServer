@@ -9,12 +9,10 @@ import {
 } from "typeorm";
 import { RolesEnum } from "../const/roles.const";
 import { PostModel } from "../../posts/entities/post.entity";
+import { BaseModel } from "src/common/entity/base.entity";
 
 @Entity()
-export class UsersModel{
-  @PrimaryGeneratedColumn()
-  id : number;
-
+export class UsersModel extends BaseModel{
   @Column({
     unique : true,
     length : 20,
@@ -35,21 +33,6 @@ export class UsersModel{
     default : RolesEnum.USER
   })
   role : RolesEnum;
-
-  @CreateDateColumn({
-    type : Date,
-    name : 'create_at'
-  })
-  createAt : Date;
-
-  @UpdateDateColumn({
-    type : Date,
-    name : 'update_at'
-  })
-  updateAt : Date;
-
-  @VersionColumn()
-  updateCount : number;
 
   @OneToMany(() => PostModel, (posts) => posts.author, {
     eager : true

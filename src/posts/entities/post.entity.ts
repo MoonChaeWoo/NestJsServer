@@ -1,11 +1,9 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UsersModel } from "../../users/entities/user.entity";
+import { BaseModel } from "src/common/entity/base.entity";
 
 @Entity()
-export class PostModel{
-    @PrimaryGeneratedColumn() // 자동으로 id생성
-    id : number;
-
+export class PostModel extends BaseModel{
     @ManyToOne(() => UsersModel, (author) => author.posts, {
         nullable : false
     })
