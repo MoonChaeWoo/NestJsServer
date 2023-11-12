@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { PostModel } from './entities/post.entity';
 // GET
@@ -49,7 +49,8 @@ export class PostsController {
   postPosts(
     @Body('authorId') authorId : number,
     @Body('title') title : string,
-    @Body('content') content : string
+    @Body('content') content : string,
+    @Body('isPublic', new DefaultValuePipe(true)) isPublic : boolean 
   ) : Promise<PostModel>{
     return this.postsService.createPost(authorId, title, content);
   };
