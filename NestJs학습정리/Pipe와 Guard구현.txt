@@ -1,0 +1,43 @@
+Pipe는 
+
+@Injectable()
+export class PasswordPipe implements PipeTransform{
+    transform(value: any, metadata: ArgumentMetadata) {
+        // value 
+        // pipe로 들어온 값
+
+
+        // ArgumentMetadata 타입 정의
+
+        // @Body('email') email : string,
+        //readonly type: Paramtype;
+        // -> @Body, @Query, @Param, or custom parameter
+        // -> @Body() 이 부분을 말함
+
+        //readonly metatype?: Type<any> | undefined;
+        // email : string 여기에서 string이걸 가리킴
+
+        //readonly data?: string | undefined;
+        // @Body('email') 여기세어 email이 data를 가리킴
+
+        if(value.toString().length < 9){
+            throw new BadRequestException('비밀번호는 9자 이상으로 입력하세요');
+        }
+
+        return value.toString();
+    }
+    
+}
+
+PipeTransform를 구현하며 transform의 구현을 작성한다.
+import로는 import {PipeTransform, Injectable, ArgumentMetadata, BadRequestException} from '@nestjs/common'
+를 하면 된다.
+
+Guard는 
+CanActivate를 구현하며 canActivate의 구현을 작성한다.
+import로는 import { CanActivate, ExecutionContext } from "@nestjs/common";
+import { Observable } from "rxjs";를 해야한다.
+
+해당 가드 사용법은
+ @UseGuards(BasicTokenGuard)이렇게 
+ @UseGuards()안에 정의한 가드를 작성해주면 된다.

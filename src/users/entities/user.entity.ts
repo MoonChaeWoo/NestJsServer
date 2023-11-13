@@ -1,15 +1,11 @@
+import { BaseModel } from "src/common/entity/base.entity";
 import {
   Column,
-  CreateDateColumn,
   Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-  VersionColumn
+  OneToMany
 } from "typeorm";
-import { RolesEnum } from "../const/roles.const";
 import { PostModel } from "../../posts/entities/post.entity";
-import { BaseModel } from "src/common/entity/base.entity";
+import { RolesEnum } from "../const/roles.const";
 
 @Entity()
 export class UsersModel extends BaseModel{
